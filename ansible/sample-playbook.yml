@@ -1,0 +1,7 @@
+---
+  - hosts: webserver
+    user: ubuntu
+
+    tasks:
+      - name: Run who Am I
+        command: whoami

@@ -1,0 +1,13 @@
+[loadbalancer]
+lb01 ansible_ssh_host=13.235.33.45 ansible_ssh_key=/home/aditya/.ssh/aditya.pem ansible_ssh_user=ubuntu
+
+
+[webserver]
+app01 ansible_ssh_host=13.232.88.242 ansible_ssh_key=/home/aditya/.ssh/aditya.pem ansible_ssh_user=ubuntu
+app02 ansible_ssh_host=13.235.24.132 ansible_ssh_key=/home/aditya/.ssh/aditya.pem ansible_ssh_user=ubuntu
+
+[database]
+db01 ansible_ssh_host=13.127.159.33 ansible_ssh_key=/home/aditya/.ssh/aditya.pem ansible_ssh_user=ubuntu
+
+[control]
+control ansible_connection=local ansible_ssh_user=aditya ansible_sudo_pass=Bujji@369

@@ -1,0 +1,22 @@
+---
+- name: install mysqldb dependencies for running mysql_db ansible modules
+  apt: name={{ item }} state=present
+  with_items:
+    - python-mysqldb
+
+- name: install mysql_server
+  apt: name=mysql-server state=present
+      
+- name: make mysql accessible from all sources
+  lineinfile: dest=/etc/mysql/mysql.conf.d/mysqld.cnf regexp=^bind-address
+              line="bind-address = {{ ansible_eth0.ipv4.address }}"
+  notify: restart mysql
+
+- name: start mysql service
+  service: name=mysql state=restarted enabled=yes
+
+- name: create mysql db named demo
+  mysql_db: name={{ db_name }} state=present
+
+- name: create user for demo db
+  mysql_user: name={{ db_user_name }} password={{ db_user_pass }} priv={{ db_name }}.*:ALL host={{ db_user_host }} state=present

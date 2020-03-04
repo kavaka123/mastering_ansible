@@ -1,0 +1,36 @@
+####### Ansible Notes ##########
+1. ansible adhoc commands are for basic debugging and to know outputs of commands
+2. default module for adhoc command is "command"
+3. always specify -i flag at the beginning and remaining options next
+4. Also include master/control server in inventory file with parameter ansible_connection=local, this prevents new ssh connection on the same host
+5. add 2 files in git repo, inventory file and ansible.cfg
+6. Add a line inventory = /path/to/inventoryfile to skip adding -i flag to every command
+
+7. ansible playbook contains multiple plays each containinh multiple tasks.
+8. each play is identtified by a hosts parameter
+9. each task is identtified by a module 
+
+########## ansible modules ##########
+
+1. apt: name=curl state=present <====> apt-get install curl
+2. service: name=apache2 state=restarted enabled=yes <====> service apache2 restart
+3. apache2_module: name=wsgi state=present  <=====> a2enmod wsgi
+4. with_items parameter in a task is a looping construct with loop variable {{ item }}
+
+
+####### flow control ###############
+handler is like a goto construct having format similar to task
+ex: handler:
+      - name: restart apache2
+        service: name=apache2 state=restarted
+
+add a notify parameter in a task to run this handler in a play
+
+ex: tasks:
+      - name: enable wsgi
+        apache2_module: name=wsgi state=present
+        notify: restart apache2
+
+
+
+#######        
