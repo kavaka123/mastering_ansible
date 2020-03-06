@@ -3,20 +3,26 @@
   apt: name={{ item }} state=present
   with_items:
     - python-mysqldb
+  tags: ['packages']  
 
 - name: install mysql_server
   apt: name=mysql-server state=present
+  tags: ['packages']
       
 - name: make mysql accessible from all sources
   lineinfile: dest=/etc/mysql/mysql.conf.d/mysqld.cnf regexp=^bind-address
               line="bind-address = {{ ansible_eth0.ipv4.address }}"
   notify: restart mysql
+  tags: ['configure']
 
 - name: start mysql service
   service: name=mysql state=restarted enabled=yes
+  tags: ['service']
 
 - name: create mysql db named demo
   mysql_db: name={{ db_name }} state=present
+  tags: ['configure']
 
 - name: create user for demo db
   mysql_user: name={{ db_user_name }} password={{ db_user_pass }} priv={{ db_name }}.*:ALL host={{ db_user_host }} state=present
+  tags: ['configure']

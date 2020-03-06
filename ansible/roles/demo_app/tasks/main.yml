@@ -6,23 +6,29 @@
     - python-pip
     - python-virtualenv
     - python-mysqldb
+  tags: ['packages']  
 
 - name: copy demo app 
   copy: src=demo/app/ dest=/var/www/demo mode=0755
   notify: restart apache2
+  tags: ['configure']
 
 - name: copy template for wsgi file
   template: src=demo.wsgi.j2 dest=/var/www/demo/demo.wsgi
   notify: restart apache2  
+  tags: ['configure']
   
 - name: copy apache2 virtual host file
   copy: src=demo/demo.conf dest=/etc/apache2/sites-available mode=0755
   notify: restart apache2
+  tags: ['configure']
   
 - name: setup python pip virtualenv
   pip: requirements=/var/www/demo/requirements.txt virtualenv=/var/www/demo/.venv
   notify: restart apache2
+  tags: ['configure']
 
 - name: Activate demo site in apache
   file: src=/etc/apache2/sites-available/demo.conf dest=/etc/apache2/sites-enabled/demo.conf state=link
   notify: restart apache2  
+  tags: ['configure']
